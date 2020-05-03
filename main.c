@@ -1,14 +1,19 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include"LinkedList.h"
-#include"Queue.h"
-#include"Stack.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+
+#include "LinkedList.h"
+#include "Queue.h"
+#include "Stack.h"
+#include "Dict.h"
 
 void test_queue();
 void test_linked_list();
 void test_stack();
 void ask_for_test();
 void print_separator();
+void test_dict();
+
 int main()
 {
 	ask_for_test();
@@ -23,6 +28,7 @@ void ask_for_test(){
 	printf("\"1\" for LinkedList \n");
 	printf("\"2\" for Queue \n");
 	printf("\"3\" for Stack \n");
+	printf("\"4\" for Dict \n");
 	scanf("%d", &test);
         switch(test){
                 case 1:
@@ -34,10 +40,39 @@ void ask_for_test(){
 		case 3:
 			test_stack();
 			break;
+		case 4:
+			test_dict();
+			break;
                 default:
                         printf("Select existing option!");
          		ask_for_test();
         }
+}
+
+void test_dict(){
+    Dict d;
+    char buf[512];
+    int i;
+
+    d = DictCreate();
+
+    DictInsert(d, "foo", "hello world");
+    puts(DictSearch(d, "foo"));
+    DictInsert(d, "foo", "hello world2");
+    puts(DictSearch(d, "foo"));
+    DictDelete(d, "foo");
+    puts(DictSearch(d, "foo"));
+    DictDelete(d, "foo");
+    assert(DictSearch(d, "foo") == 0);
+    DictDelete(d, "foo");
+
+    for(i = 0; i < 10000; i++) {
+        sprintf(buf, "%d", i);
+        DictInsert(d, buf, buf);
+    }
+
+    printf("%d", d->size);
+    DictDestroy(d);
 }
 
 void test_linked_list(){
